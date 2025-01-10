@@ -1,0 +1,29 @@
+{
+  "name": "insert",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@cap-js/hana": "1.4.1",
+    "@sap/cds": "^8.6.0",
+    "@sap/cds-hana": "^2.0.0",
+    "@sap/xssec": "^4",
+    "express": "^4"
+  },
+  "scripts": {
+    "start": "cds-serve"
+  },
+  "cds": {
+    "sql": {
+      "native_hana_associations": false
+    },
+    "requires": {
+      "auth": {
+        "restrict_all_services": false,
+        "kind": "dummy"
+      }
+    }
+  }
+}

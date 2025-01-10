@@ -1,0 +1,7 @@
+POST http://localhost:4004/odata/v4/source-data/doInsert
+content-type: application/json
+Authorization: None
+
+{
+
+}
