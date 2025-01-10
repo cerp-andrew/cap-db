@@ -26,7 +26,6 @@ module.exports = async (srv) => {
         } catch (error) {
             console.log(error);
         }
- 
         
     });
 }
