@@ -1,18 +1,7 @@
-namespace cerpass.sourceData;
+namespace namespace.sourceData;
+using { managed, temporal, cuid } from '@sap/cds/common';
 
-using { managed, cuid } from '@sap/cds/common';
-using { cerpass.systems as systems } from '../db/systems-db';
-
-
-	aspect aspectV_USERNAME: {
-	//	key	GUID		    : UUID;
-		key MANDT		    : String(3);
+	entity dbTable: managed {
+		key mandt : String(3);
+			sid: String(4)
 	};
-
-	// entity V_USERNAME: aspectV_USERNAME, managed {
-	// 	customerSystem  : association[1] to systems.customerSystems;
-	// }
-
-    entity stageV_USERNAME: aspectV_USERNAME {
-        //customerSystem  : association[1] to systems.customerSystems;
-    }

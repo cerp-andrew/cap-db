@@ -6,8 +6,8 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "@cap-js/hana": "1.4.1",
-    "@sap/cds": "8.4.1",
+    "@cap-js/hana": "^1.5.2",
+    "@sap/cds": "^8.6.1",
     "@sap/xssec": "^4",
     "express": "^4"
   },
@@ -17,6 +17,12 @@
   "cds": {
     "sql": {
       "native_hana_associations": false
+    },
+    "log": {
+      "levels": {
+        "sql": "debug",
+        "cds": "debug"
+      }
     },
     "requires": {
       "auth": {

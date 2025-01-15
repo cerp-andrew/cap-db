@@ -1,9 +1,11 @@
 {
-  "namespace": "my.bookshop",
+  "namespace": "namespace.sourceData",
   "definitions": {},
   "meta": {
-    "creator": "CDS Compiler v4.9.8",
-    "build": "CDS Build v7.9.5"
+    "creator": "CDS Compiler v5.6.0",
+    "flavor": "inferred",
+    "minified": true,
+    "build": "CDS Build v8.6.1"
   },
   "$version": "2.0"
 }

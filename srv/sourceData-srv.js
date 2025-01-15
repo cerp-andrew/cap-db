@@ -1,29 +1,56 @@
 
 
 module.exports = async (srv) => {
-    srv.on('doInsert', async (msg) => {
+    
+    //Put here for debugging db services but this does work
+    srv.on('CREATE', 'dbTable', async (req, next) => {
+        await next();
+    });
+    
+    srv.on('doInsert', async () => {
+        
+        //action to show some issues with various forms of sql. CDS type 'cuid' is also failing
+        //the same way managed fields fail. Managed fields are easier to show the issue as I see th enull records
+        //cuid cannot be inserted with null as it is the key field
+        
         console.log('doInsert');
+        await cds.tx (async ()=>{
+            let results = await cds.run(DELETE.from('namespace.sourceData.dbTable'));
+            console.log(results);
+        })
 
-        //let insertColumnString = '"MANDT","BNAME","PERSNUMBER","NAME_LAST","NAME_TEXT","MC_NAMEFIR","MC_NAMELAS","SYSTEMID","CUSTOMERSYSTEM_ID"';
-        //let rowsToInsertArray = ['200', 'NPRINCE', '0000022975', 'Prince', 'Neil Prince', 'NEIL', 'PRINCE', 'CED', 'a0c6a346-3ad4-4b06-9553-01fa0bac9fd7', '983f62b7-5cc2-4bc4-a10e-3d7339e572b9'];
-        //let insertColumnString = '"MANDT","SYSTEMID","BNAME","PERSNUMBER","NAME_LAST","NAME_TEXT","MC_NAMEFIR","MC_NAMELAS","customerSystem_ID"';
-        //let rowsToInsertArray = ['200', 'CED', 'NPRINCE', '0000022975', 'Prince', 'Neil Prince', 'NEIL', 'PRINCE',  'a0c6a346-3ad4-4b06-9553-01fa0bac9fd7'];      
-        
-
-        //no association to system table
-        //let insertColumnString = '"MANDT","SYSTEMID","BNAME","PERSNUMBER","NAME_LAST","NAME_TEXT","MC_NAMEFIR","MC_NAMELAS"';
-        //let rowsToInsertArray = ['200', 'CED', 'NPRINCE', '0000022975', 'Prince', 'Neil Prince', 'NEIL', 'PRINCE']; 
-        
-        // let insertColumnString = '"ID", "MANDT"';
-        // let rowsToInsertArray = ['e0a10cf2-862d-4467-8c6c-588a441c45bd', '200'];  
-        
-        let insertColumnString = '"MANDT"';
-        let rowsToInsertArray = [['200']];  
-
+        //this does NOT populate managed fields
         try {
-            let result = await INSERT.into('cerpass.sourceData.stageV_USERNAME').columns(insertColumnString).rows(rowsToInsertArray);   
+            let insertColumnString = ['mandt','sid'];
+            let rowsToInsertArray = [['100', 'ABC']];
+            let result = await cds.run(INSERT.into('namespace.sourceData.dbTable')
+                                             .columns(insertColumnString)
+                                             .rows(rowsToInsertArray));   
             console.log(result);         
         } catch (error) {
+            console.log(error);
+        }        
+
+        //this does populate managed fields
+        try {
+            let rowsToInsertEntries = {mandt: '200', sid: 'DEF'};
+            let results = await cds.run(INSERT.into('namespace.sourceData.dbTable')
+                                              .entries(rowsToInsertEntries));
+            console.log(results);
+        } catch (error) {
+            console.log(error);
+        };
+        
+        //this does NOT populate managed fields
+        try {
+            let query = {INSERT:{ into: { ref: ['namespace.sourceData.dbTable']},
+                columns: [ 'mandt', 'sid' ],
+                rows: [ [ '300', 'XYZ' ] ]
+            }};  
+            let results = await cds.run(query);
+            console.log(results);          
+        }
+        catch (error) {
             console.log(error);
         }
         

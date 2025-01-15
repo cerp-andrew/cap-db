@@ -5,3 +5,19 @@ Authorization: None
 {
 
 }
+
+### standard post - this works with managed fields
+POST http://localhost:4004/odata/v4/source-data/dbTable
+content-type: application/json
+Authorization: None
+
+{
+    "mandt": "004",
+    "sid": "0001"
+}
+
+
+### get records - shows which managed fields have failed
+GET http://localhost:4004/odata/v4/source-data/dbTable
+content-type: application/json
+Authorization: None
