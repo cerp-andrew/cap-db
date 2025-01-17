@@ -53,6 +53,28 @@ module.exports = async (srv) => {
         catch (error) {
             console.log(error);
         }
+
+        try {
+            let eamRequestRole = await cds.run(
+                SELECT.from("namespace.sourceData.eamRequestRole").where({
+                    eamRequest_eamRequestKey: '898cf0c6-53cc-4d13-82db-b82bb7d3d0b7'
+                })
+                      .columns(
+                        "eamRequestRoleKey",
+                        "eamRequest.eamRequestKey",
+                        "eamRequest.requestor",
+                        "role"
+                        )  
+                )
+                //with the new database driver, requestor is undefined
+                //npm add @sap-cds-hana and this now works
+
+                //remove @cap-js/hana and add hdb and it also works
+                console.log(`Requestor is ${eamRequestRole[0].requestor}`);
+        } catch (error) {
+            console.log(error);
+        }
+        
         
     });
 }
