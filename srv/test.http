@@ -21,3 +21,8 @@ Authorization: None
 GET http://localhost:4004/odata/v4/source-data/dbTable
 content-type: application/json
 Authorization: None
+
+### doSelect
+POST http://localhost:4004/odata/v4/source-data/doSelect
+content-type: application/json
+Authorization: None

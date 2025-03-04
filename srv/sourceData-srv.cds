@@ -7,4 +7,6 @@ service sourceData {
 
 
     action doInsert();
+
+    action doSelect();
 }

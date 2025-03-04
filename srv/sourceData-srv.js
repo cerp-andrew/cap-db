@@ -77,4 +77,89 @@ module.exports = async (srv) => {
         
         
     });
+
+    srv.on('doSelect', async () => {
+        console.log('doSelect');
+        let currentDate = new Date().toISOString();
+
+        try {
+            //Do a read with the correctly cased table name (This will work and return the column names in the case they are defined in the CDS definition)
+            console.log('Run SELECT with correctly cased table name');
+            let result = await cds.run(
+                SELECT.from("namespace.sourceData.HRP1000")
+                    .columns("GUID", "Mandt", "Otype", "Objid", "Short", "Stext", "Begda", "Endda", "customerSystem_ID", "customerSystem.systemId")
+                    .where({
+                        Otype: "S",
+                        Begda: { "<=": currentDate },
+                        Endda: { ">=": currentDate },
+                        "customerSystem.systemId": "SYS"
+                    })
+            );
+            //This will work and return the column names in the case they are defined in the CDS definition
+            console.log("Correctly cased table name: ", result);
+            console.log("Results returned with column names in the case they are defined in the CDS definition and columns from the association are returned in the format associationName_columnName");
+        } catch (error) {
+            console.log(error);
+        }
+
+        //Do a select with the incorrectly cased table name (This will will work but the result will return with the column names in uppercase not the case defined in the CDS definition)
+        try {
+            console.log('Run SELECT with incorrectly cased table name');
+            let result = await cds.run(
+                SELECT.from("namespace.sourceData.hrp1000")
+                    .columns("GUID", "Mandt", "Otype", "Objid", "Short", "Stext", "Begda", "Endda", "customerSystem_ID", "customerSystem.systemId")
+                    .where({
+                        Otype: "S",
+                        Begda: { "<=": currentDate },
+                        Endda: { ">=": currentDate },
+                        "customerSystem.systemId": "SYS"
+                    })
+            );
+            //This will work but the result will return with the column names in uppercase not the case defined in the CDS definition
+            console.log("Incorrectly cased table name: ", result);
+            console.log("Results returned with column names in uppercase and columns from the association are returned in the format columnName not associationName_columnName");
+        } catch (error) {
+            console.log(error);
+        }
+
+        //Do a select with the corectly cased table name but the columns in the wrong case (This will fail)
+        try {
+            console.log('Run SELECT with correctly cased table name but columns in the wrong case');
+            let result = await cds.run(
+                SELECT.from("namespace.sourceData.HRP1000")
+                    .columns("guid", "mandt", "otype", "objid", "short", "stext", "begda", "endda", "customersystem_id", "customersystem.systemid")
+                    .where({
+                        otype: "S",
+                        begda: { "<=": currentDate },
+                        endda: { ">=": currentDate },
+                        "customersystem.systemid": "SYS"
+                    })
+            );
+            console.log(result);
+        } catch (error) {
+            //This will fail as the columns are not in the correct case
+            console.log("Correctly cased table name but columns in the wrong case: ", error);
+        }
+
+        //Do a select with the incorrectly cased table name and the columns in the wrong case (This will work)
+        try {
+            console.log('Run SELECT with incorrectly cased table name and columns in the wrong case');
+            let result = await cds.run(
+                SELECT.from("namespace.sourceData.hrp1000")
+                    .columns("guid", "mandt", "otype", "objid", "short", "stext", "begda", "endda", "customersystem_id", "customersystem.systemid")
+                    .where({
+                        otype: "S",
+                        begda: { "<=": currentDate },
+                        endda: { ">=": currentDate },
+                        "customersystem.systemid": "SYS"
+                    })
+            );
+            //This will work but the result will return with the column names in uppercase not the case defined in the CDS definition
+            console.log("Incorrectly cased table name and columns in the wrong case: ", result);
+            console.log("Results returned with column names in uppercase");
+        } catch (error) {
+            console.log(error);
+        }
+
+    });
 }

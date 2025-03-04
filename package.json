@@ -7,7 +7,7 @@
   "private": true,
   "dependencies": {
     "@cap-js/hana": "^1.5.2",
-    "@sap/cds": "8.4.2",
+    "@sap/cds": "8.7.2",
     "@sap/xssec": "^4",
     "express": "^4"
   },
